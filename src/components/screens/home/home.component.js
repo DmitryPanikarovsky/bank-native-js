@@ -2,7 +2,7 @@ import { BaseScreen } from '@/core/component/base-screen.component'
 import renderService from '@/core/services/render.service'
 import template from './home.template.html'
 import styles from './home.module.scss'
-import { $R } from '@/core/rquery/rquery.lib'
+import { Field } from '@/components/ui/field/field.component'
 
 export class Home extends BaseScreen {
     constructor() {
@@ -10,9 +10,16 @@ export class Home extends BaseScreen {
     }
 
     render() {
-        const element = renderService.htmlToElement(template, [], styles)
-
-        $R(element).find('h1').css('color', 'black')
+        const element = renderService.htmlToElement(
+            template, [
+                new Field({
+                    name: 'string',
+                    placeholder: 'Введите e-mail',
+                    variant: 'green'
+                })
+            ], 
+            styles
+        )
 
         return element
     }
