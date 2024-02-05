@@ -41,7 +41,7 @@ module.exports = {
     resolve: {
         extensions: ['.js'],
         alias: {
-            '@': path.resolve(__dirname, 'src/')
+            '@': path.resolve(__dirname, 'src')
         }
     },
     devtool: isDev ? 'source-map' : false,
@@ -97,7 +97,7 @@ module.exports = {
                         }
                     },
                     {
-                        loader: 'sass-loadeer',
+                        loader: 'sass-loader',
                         options: {
                             sourceMap: true
                         }
