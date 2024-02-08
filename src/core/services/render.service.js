@@ -1,6 +1,12 @@
 import ChildComponent from '../component/child.component'
 
 class RenderService {
+    /**
+     * @param {string} html
+     * @param {Array} components
+     * @param {Object} [styles]
+     * @returns {HTMLElement}
+     */
     htmlToElement(html, components = [], styles) {
         const template = document.createElement('template')
         template.innerHTML = html.trim()
@@ -16,6 +22,10 @@ class RenderService {
         return element
     }
 
+    /**
+     * @param {HTMLElement} parentElement
+     * @param {Array} components
+     */
     #replaceComponentTags(parentElement, components) {
         const componentTagPattern = /^component-/
         const allElements = parentElement.getElementsByTagName('*')
@@ -45,6 +55,11 @@ class RenderService {
         }
     }
 
+    /**
+     * @param {Object} moduleStyles
+     * @param {string} element
+     * @returns {void}
+     */
     #applyModuleStyles(moduleStyles, element) {
         if (!element) return
 
