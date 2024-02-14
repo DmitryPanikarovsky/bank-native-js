@@ -1,5 +1,8 @@
 import { SERVER_URL } from '@/config/url.config';
 import { extractErrorMessage } from './extract-error-message'
+import { StorageService } from '../services/storage.service'
+import { ACCESS_TOKEN_KEY } from '@/constants/auth.constants'
+import { NotificationService } from '../services/notification.service'
 
 /**
 * RedQuery is a minimalistic library for handling API requests.
@@ -30,7 +33,7 @@ export async function redQuery({
     const url = `${SERVER_URL}/api${path}`
 
     /* ACCESS_TOKEN from LS */
-    const accessToken = ''
+    const accessToken = new StorageService().getItem(ACCESS_TOKEN_KEY)
 
     const requestOptions = {
         method,
@@ -39,38 +42,35 @@ export async function redQuery({
             ...headers
         }
     }
-
     if (accessToken) {
         requestOptions.headers.Authorization = `Bearer ${accessToken}`
     }
-
     if (body) {
         requestOptions.body = JSON.stringify(body)
     }
-
     try {
         const response = await fetch(url, requestOptions)
-
         if (response.ok) {
+            data = await response.json()
             if (onSuccess) {
-                onSuccess(await response.json())
+                onSuccess(data)
             }
-
         } else {
+            const errorData = await response.json()
+            const errorMessage = extractErrorMessage(errorData)
             if (onError) {
-                onError(extractErrorMessage(await response.json()))
+                onError(errorMessage)
             }
-
+            new NotificationService().show('error', errorMessage)
         }
-
     } catch (errorData) {
-        if (extractErrorMessage(errorData)) {
-            onError(extractErrorMessage(errorData))
-        }
+        const errorMessage = extractErrorMessage(errorData)
 
+        if (errorMessage) {
+            onError(errorMessage)
+        }
     } finally {
         isLoading = false
     }
-
     return { isLoading, error, data }
 }
