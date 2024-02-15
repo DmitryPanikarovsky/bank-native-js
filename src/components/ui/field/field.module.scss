@@ -10,6 +10,15 @@
     margin-bottom: 1.3rem;
     display: block;
 
+    input {
+        width: 100%;
+    }
+
+    input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 10em $gray inset !important;
+        -webkit-text-fill-color: white !important;
+    }
+
     &:focus-within {
         border-color: rgba($primary, 0.5);
     }
