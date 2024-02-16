@@ -98,6 +98,20 @@ class RQuery {
     /* EVENTS */
 
     /**
+     * Add an event listener to the selected element for the specified event type.
+     * @param {string} eventType - The type of event to listen for (e.g., 'click', 'input', etc.).
+     * @param {function(Event): void} callback - The event listener function to execute when the event is triggered. The function will receive the event object as its argument.
+     * @returns {RQuery} The current RQuery instance for chaining.
+     */
+    on(eventType, callback) {
+        if (typeof eventType !== 'string' || typeof callback !== 'function') {
+            throw new Error('eventType must be a string and callback must be a function')
+        }
+        this.element.addEventListener(eventType, callback)
+        return this
+    }
+
+    /**
      * Attach a click event listener to the selected element.
      * @param {function(Event): void} callback - The event listener function to execute when the selected element is clicked. The function will receive the event object as its argument.
      * @returns {RQuery} The current RQuery instance for chaining.
@@ -123,7 +137,7 @@ class RQuery {
         } else {
             throw new Error('Element must be a form')
         }
-        
+
         return this
     }
 
@@ -192,6 +206,24 @@ class RQuery {
     /* STYLES */
 
     /**
+     * Shows the selected element by removing the 'display' style property.
+     * @returns {RQuery} The current RQuery instance for chaining.
+     */
+    show() {
+        this.element.style.removeProperty('display')
+        return this
+    }
+
+    /**
+     * Hides the selected element by setting its display style to 'none'.
+     * @returns {RQuery} The current RQuery instance for chaining.
+     */
+    hide() {
+        this.element.style.display = 'none'
+        return this
+    }
+
+    /**
      * Set the CSS style of the selected element.
      * @param {string} property - The CSS property to set.
      * @param {string} value - The value to set for the CSS property.
@@ -222,7 +254,7 @@ class RQuery {
 
         return this
     }
-    
+
     /**
      * Removes a class or a list of classes from the current element.
      * @param {string | string[]} classNames - A single class name or an array of class names to remove from the element.
@@ -249,7 +281,7 @@ class RQuery {
     attr(attributeName, value) {
         if (typeof attributeName !== 'string') {
             throw new Error('Attribute name must be a string')
-        } 
+        }
 
         if (typeof value === 'undefined') {
             return this.element.getAttribute(attributeName)
