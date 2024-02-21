@@ -1,7 +1,7 @@
 import { redQuery } from '@/core/red-query/red-query.lib'
 
 export class TransactionService {
-    #BASE_URL = '/transaction'
+    #BASE_URL = '/transactions'
 
     getAll(onSuccess) {
         return redQuery({
