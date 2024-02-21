@@ -50,17 +50,21 @@ export async function redQuery({
     }
     try {
         const response = await fetch(url, requestOptions)
+
         if (response.ok) {
             data = await response.json()
+
             if (onSuccess) {
                 onSuccess(data)
             }
         } else {
             const errorData = await response.json()
             const errorMessage = extractErrorMessage(errorData)
+
             if (onError) {
                 onError(errorMessage)
             }
+
             new NotificationService().show('error', errorMessage)
         }
     } catch (errorData) {
