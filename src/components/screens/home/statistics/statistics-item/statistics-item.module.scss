@@ -1,0 +1,35 @@
+@import 'src/styles/variables';
+@import 'src/styles/mixins';
+
+.statistic-item {
+    padding: 1rem;
+    border-radius: $radius;
+    margin-bottom: 1rem;
+    position: relative;
+
+    &.green {
+        background-color: $secondary;
+    }
+
+    &.purple {
+        background-color: $primary;
+    }
+
+    >span {
+        color: #111;
+        display: inline-block;
+        z-index: 2;
+        position: relative;
+
+        &:first-child {
+            margin-right: 0.6rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        &:last-child {
+            font-size: 18px;
+            font-weight: 500;
+        }
+    }
+}

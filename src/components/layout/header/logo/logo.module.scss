@@ -1,7 +1,11 @@
+@import 'src/styles/variables';
+
 .logo {
-	> a {
+	> div {
 		color: #fff;
 		font-weight: 600;
 		font-size: 40px;
+		border-bottom: 1px solid transparent;
+		border-color: $primary;
 	}
 }

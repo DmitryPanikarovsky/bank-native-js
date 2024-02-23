@@ -35,3 +35,4 @@ export class TransactionItem extends ChildComponent {
         return this.element
     }
 }
+
