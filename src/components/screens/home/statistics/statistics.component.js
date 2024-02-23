@@ -10,6 +10,7 @@ import { $R } from '@/core/rquery/rquery.lib';
 import { LOADER_SELECTOR, Loader } from '@/components/ui/loader/loader.component'
 import { StatisticsItem } from './statistics-item/statistics-item.component'
 import { formatToCurrency } from '@/utils/format/format-to-currency'
+import { CircleChart } from './circle-chart/circle-chart.component'
 
 export class Statistics extends ChildComponent {
     constructor() {
@@ -26,17 +27,17 @@ export class Statistics extends ChildComponent {
         this.#addListeners()
     }
 
-    #addListeners = () => {
+    #addListeners() {
         document.addEventListener(
             TRANSACTION_COMPLETED,
-            this.#onTransactionCompleted
+            this.#onTransactionCompleted.bind(this)
         )
     }
 
-    #removeListeners = () => {
+    #removeListeners() {
         document.removeEventListener(
             TRANSACTION_COMPLETED,
-            this.#onTransactionCompleted
+            this.#onTransactionCompleted.bind(this)
         )
     }
 
@@ -46,6 +47,24 @@ export class Statistics extends ChildComponent {
 
     destroy() {
         this.#removeListeners()
+    }
+
+    renderChart(income, expense) {
+        const total = income + expense
+        let incomePercent = (income * 100) / total,
+            expensePercent = 100 - incomePercent
+
+        if (income && !expense) {
+            incomePercent = 100
+            expensePercent = 0.1
+        }
+
+        if (!income && expense) {
+            incomePercent = 0.1
+            expensePercent = 100
+        }
+
+        return new CircleChart(incomePercent, expensePercent).render()
     }
 
     fetchData() {
@@ -58,8 +77,8 @@ export class Statistics extends ChildComponent {
             const statisticsItemsElement = $R(this.element).find('#statistics-items')
             statisticsItemsElement.text('')
 
-            /* const circleChartElement = $R(this.element).find('#circle-chart')
-            circleChartElement.text('') */
+            const circleChartElement = $R(this.element).find('#circle-chart')
+            circleChartElement.text('')
 
             statisticsItemsElement
                 .append(
@@ -76,6 +95,8 @@ export class Statistics extends ChildComponent {
                         'purple'
                     ).render()
                 )
+            
+            circleChartElement.append(this.renderChart(data[0].value, data[1].value))
         })
     }
 
