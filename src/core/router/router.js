@@ -6,67 +6,67 @@ import { $R } from '../rquery/rquery.lib'
 import { ROUTES } from './routes.data'
 
 export class Router {
-    #routes = ROUTES
-    #currentRoute = null
-    #layout = null
+	#routes = ROUTES
+	#currentRoute = null
+	#layout = null
 
-    constructor() {
-        window.addEventListener('popstate', () => {
-            this.#handleRouteChange()
-        })
+	constructor() {
+		window.addEventListener('popstate', () => {
+			this.#handleRouteChange()
+		})
 
-        this.#handleRouteChange()
-        this.#handleLinks()
-    }
+		this.#handleRouteChange()
+		this.#handleLinks()
+	}
 
-    #handleLinks() {
-        document.addEventListener('click', event => {
-            const target = event.target.closest('a')
+	#handleLinks() {
+		document.addEventListener('click', event => {
+			const target = event.target.closest('a')
 
-            if (target) {
-                event.preventDefault()
-                this.navigate(target.href)
-            }
-        })
-    }
+			if (target) {
+				event.preventDefault()
+				this.navigate(target.href)
+			}
+		})
+	}
 
-    getCurrentPath() {
-        return window.location.pathname
-    }
+	getCurrentPath() {
+		return window.location.pathname
+	}
 
-    navigate(path) {
-        if (path !== this.getCurrentPath()) {
-            window.history.pushState({}, '', path)
-            this.#handleRouteChange()
-        }
-    }
+	navigate(path) {
+		if (path !== this.getCurrentPath()) {
+			window.history.pushState({}, '', path)
+			this.#handleRouteChange()
+		}
+	}
 
-    #handleRouteChange() {
-        const path = this.getCurrentPath() || '/'
-        let route = this.#routes.find(route => route.path === path)
+	#handleRouteChange() {
+		const path = this.getCurrentPath() || '/'
+		let route = this.#routes.find(route => route.path === path)
 
-        if (!route) {
-            route = {
-                component: NotFound
-            }
-        }
+		if (!route) {
+			route = {
+				component: NotFound
+			}
+		}
 
-        this.#currentRoute = route
-        this.#render()
-    }
+		this.#currentRoute = route
+		this.#render()
+	}
 
-    #render() {
-        const component = new this.#currentRoute.component().render()
+	#render() {
+		const component = new this.#currentRoute.component().render()
 
-        if (!this.#layout) {
-            this.#layout = new Layout({
-                router: this,
-                children: component
-            }).render()
+		if (!this.#layout) {
+			this.#layout = new Layout({
+				router: this,
+				children: component
+			}).render()
 
-            $R('#app').html('').append(this.#layout)
-        } else {
-            $R('#content').html('').append(component)
-        }
-    }
+			$R('#app').html('').append(this.#layout)
+		} else {
+			$R('#content').html('').append(component)
+		}
+	}
 }
